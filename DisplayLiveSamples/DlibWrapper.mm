@@ -46,7 +46,7 @@
     self.prepared = YES;
 }
 
-- (void)doWorkOnSampleBuffer:(CMSampleBufferRef)sampleBuffer inRects:(NSArray<NSValue *> *)rects long1:(long *)pnt1 long2:(long *) pnt2 long3:(long *)pnt3 long4:(long *)pnt4 long5:(long *)pnt5  long6:(long *)pnt6 long7:(long *)pnt7 long8:(long *)pnt8 {
+- (void)doWorkOnSampleBuffer:(CMSampleBufferRef)sampleBuffer inRects:(NSArray<NSValue *> *)rects slong1:(long *)pnt1 slong2:(long *) pnt2 slong3:(long *)pnt3 slong4:(long *)pnt4 slong5:(long *)pnt5 slong6:(long *)pnt6 slong7:(long *)pnt7 slong8:(long *)pnt8 {
     
     if (!self.prepared) {
         [self prepare];
@@ -66,6 +66,10 @@
     long px2;
     long px3;
     long px4;
+    long px5;
+    long px6;
+    long px7;
+    long px8;
     
     // set_size expects rows, cols format
     img.set_size(height, width);
@@ -110,7 +114,7 @@
             if (k == 62) {
                 dlib::point p = shape.part(k);
                 draw_solid_circle(img, p, 3, dlib::rgb_pixel(0, 255, 0));
-                px1 = p.x();
+                px1 = p.y();
                 //px2 = p.y();
                 *pnt1 = px1;
                 //*pnt1 = px1;
@@ -130,24 +134,45 @@
         
         for (unsigned long k = 0; k < shape.num_parts(); k++) {
         //for (unsigned long k = 0; k < 10; k++) {
-            if (k > 45 && k < 48) {
+            //rightEye
+            if (k == 46) {
                 dlib::point p = shape.part(k);
                 draw_solid_circle(img, p, 3, dlib::rgb_pixel(255, 0, 0));
-            }else if (k > 42 && k < 45) {
+                px3 = p.y();
+                *pnt3 = px3;
+            }else if (k == 44) {
                 dlib::point p = shape.part(k);
                 draw_solid_circle(img, p, 3, dlib::rgb_pixel(0, 255, 0));
+                px4 = p.y();
+                *pnt4 = px4;
+            //leftEye
             }else if (k > 36 && k < 39) {
                 dlib::point p = shape.part(k);
                 draw_solid_circle(img, p, 3, dlib::rgb_pixel(0, 0, 255));
             }else if (k > 39 && k < 42) {
                 dlib::point p = shape.part(k);
                 draw_solid_circle(img, p, 3, dlib::rgb_pixel(255, 255, 255));
-            }else if (k > 26 && k < 28) {
+                
+                //faceLine
+            }else if (k == 27) {
                 dlib::point p = shape.part(k);
                 draw_solid_circle(img, p, 3, dlib::rgb_pixel(255, 0, 255));
-            }else if (k > 7 && k < 9) {
+                px5 = p.x();
+                *pnt5 = px5;
+                px6 = p.y();
+                *pnt6 = px6;
+            }
+//            }else if (k > 7 && k < 9) {
+//                dlib::point p = shape.part(k);
+//                draw_solid_circle(img, p, 3, dlib::rgb_pixel(255, 0, 255));
+//            }
+            else if (k == 33){
                 dlib::point p = shape.part(k);
-                draw_solid_circle(img, p, 3, dlib::rgb_pixel(255, 0, 255));
+                draw_solid_circle(img, p, 3, dlib::rgb_pixel(0, 255, 0));
+                px7 = p.x();
+                *pnt7 = px7;
+                px8 = p.y();
+                *pnt8 = px8;
             }
             
         }

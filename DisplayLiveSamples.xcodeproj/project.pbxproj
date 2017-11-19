@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5FBF847387AAADF0F8486508 /* Pods_DisplayLiveSamplesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38CBCDA2B66822B73282C17D /* Pods_DisplayLiveSamplesTests.framework */; };
 		8E369EC41FBF425500F5CDDB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8E369EC31FBF425500F5CDDB /* GoogleService-Info.plist */; };
+		8E369EC61FC1C20100F5CDDB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E369EC51FC1C20100F5CDDB /* Constants.swift */; };
 		A56695F01CE8B34B00BD7EAF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56695EF1CE8B34B00BD7EAF /* AppDelegate.swift */; };
 		A56695F21CE8B34B00BD7EAF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56695F11CE8B34B00BD7EAF /* ViewController.swift */; };
 		A56695F51CE8B34B00BD7EAF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A56695F31CE8B34B00BD7EAF /* Main.storyboard */; };
@@ -50,6 +51,7 @@
 		4ECD087BFE1AFC2BCA5D0BB1 /* Pods-DisplayLiveSamples.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DisplayLiveSamples.release.xcconfig"; path = "Pods/Target Support Files/Pods-DisplayLiveSamples/Pods-DisplayLiveSamples.release.xcconfig"; sourceTree = "<group>"; };
 		640C8BFB32347CF88530EFE5 /* Pods-DisplayLiveSamples.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DisplayLiveSamples.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DisplayLiveSamples/Pods-DisplayLiveSamples.debug.xcconfig"; sourceTree = "<group>"; };
 		8E369EC31FBF425500F5CDDB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8E369EC51FC1C20100F5CDDB /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = "../../pbl-itbt/beaconProject/Constants.swift"; sourceTree = "<group>"; };
 		A56695EC1CE8B34B00BD7EAF /* DisplayLiveSamples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DisplayLiveSamples.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A56695EF1CE8B34B00BD7EAF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A56695F11CE8B34B00BD7EAF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 		A56695EE1CE8B34B00BD7EAF /* DisplayLiveSamples */ = {
 			isa = PBXGroup;
 			children = (
+				8E369EC51FC1C20100F5CDDB /* Constants.swift */,
 				8E369EC31FBF425500F5CDDB /* GoogleService-Info.plist */,
 				A5A1B2D01CEA317B00626AC5 /* DlibWrapper.h */,
 				A5A1B2D11CEA317B00626AC5 /* DlibWrapper.mm */,
@@ -473,6 +476,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E369EC61FC1C20100F5CDDB /* Constants.swift in Sources */,
 				A5A1B2D21CEA317B00626AC5 /* DlibWrapper.mm in Sources */,
 				A56695F21CE8B34B00BD7EAF /* ViewController.swift in Sources */,
 				A566961E1CE8B4A100BD7EAF /* SessionHandler.swift in Sources */,
@@ -652,6 +656,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = M35Y9K8K93;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					DLIB_JPEG_SUPPORT,
 					DLIB_NO_GUI_SUPPORT,

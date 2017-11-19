@@ -16,15 +16,20 @@ class SessionHandler : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, A
     let sampleQueue = DispatchQueue(label: "com.zweigraf.DisplayLiveSamples.sampleQueue", attributes: [])
     let faceQueue = DispatchQueue(label: "com.zweigraf.DisplayLiveSamples.faceQueue", attributes: [])
     let wrapper = DlibWrapper()
-    var pnt1:CLong = 0
-    var pnt2:CLong = 0
-    var pnt3:CLong = 0
-    var pnt4:CLong = 0
+    var mouseUp:CLong = 0
+    var mouseDown:CLong = 0
+    var rEyeUp:CLong = 0
+    var rEyeDown:CLong = 0
+    var faceCenterUpx:CLong = 0
+    var faceCenterDownx:CLong = 0
+    var faceCenterUpy:CLong = 0
+    var faceCenterDowny:CLong = 0
     var databaseRef:DatabaseReference!
     var currentMetadata: [AnyObject]
     let deviceId = UIDevice.current.identifierForVendor!.uuidString
     let formatter = DateFormatter()
-    let sTimer = Date()
+    var sTimer = Date()
+    var mCount:Int = 0
     
     override init() {
         currentMetadata = []
@@ -82,28 +87,44 @@ class SessionHandler : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, A
                     let convertedObject = captureOutput.transformedMetadataObject(for: faceObject, connection: connection)
                     return NSValue(cgRect: convertedObject!.bounds)
             }
-            
-            wrapper?.doWork(on: sampleBuffer, inRects: boundsArray,long1: &pnt1,long2: &pnt2,long3: &pnt3,long4: &pnt4)
+            //Thread.sleep(forTimeInterval: 2)
+            wrapper?.doWork(on: sampleBuffer, inRects: boundsArray,slong1: &mouseUp,slong2: &mouseDown,slong3: &rEyeUp,slong4: &rEyeDown,slong5: &faceCenterUpx,slong6: &faceCenterUpy,slong7: &faceCenterDownx,slong8: &faceCenterDowny)
         }
         //print("上x" + String(pnt1) + "上y" + String(pnt2) + "下x" + String(pnt3) + "下y" + String(pnt4))
-        print("上：" + String(pnt2))
-        print("下：" + String(pnt4))
-        print("あき具合：" + String(pnt4 - pnt2))
-        moveFace()
-        layer.enqueue(sampleBuffer)
-    }
-    
-    func moveFace(){
-        let date = Date()
-        if sTimer.timeIntervalSinceNow < -1  {
-            let dateStr = formatter.string(from: date)
-            //let heightPer = (self.view.bounds.height/image.size.height)
-            formatter.dateFormat = "MM-dd-HH-mm-ss"
-            let moveFace:[String:Any] = ["time":dateStr,"origin_x": pnt2,"origin_y": pnt4];
-            databaseRef.childByAutoId().child(deviceId).setValue(moveFace)
-            
+        //print("上：" + String(mouseUp))
+        //print("下：" + String(mouseDown))
+        if faceCenterDowny > 0 {
+            let heightPer = (bsHeight/CGFloat(faceCenterDowny - faceCenterUpy))
+            //print("heightPer：" + String(CLong(heightPer)))
+//            print("口あき具合：" + String(CLong(CGFloat(mouseDown) * heightPer - CGFloat(mouseUp) * heightPer)))
+//            print("目あき具合：" + String(CLong(CGFloat(rEyeUp) * heightPer - CGFloat(rEyeDown) * heightPer)))
+//            print("倍率：" + String(faceCenterDowny - faceCenterUpy))
+//            print("傾き：" + String(CLong(CGFloat(faceCenterUpx - faceCenterDownx) * heightPer)))
+            let date = Date()
+            if NSDate().timeIntervalSince(sTimer) > 1  {
+                let dateStr = formatter.string(from: date)
+                //let heightPer = (self.view.bounds.height/image.size.height)
+                formatter.dateFormat = "MM-dd-HH-mm-ss"
+                let moveFace:[String:Any] = ["time":dateStr,"mouse": CLong(CGFloat(mouseDown) * heightPer - CGFloat(mouseUp) * heightPer),"eye": CLong(CGFloat(rEyeUp) * heightPer - CGFloat(rEyeDown) * heightPer),"line": CLong(CGFloat(faceCenterUpx - faceCenterDownx) * heightPer)];
+                databaseRef.childByAutoId().child(deviceId).setValue(moveFace)
+                sTimer = Date()
+                if CLong(CGFloat(mouseDown) * heightPer - CGFloat(mouseUp) * heightPer) > 200 {
+                    mCount = mCount + 1
+                    print(String(mCount))
+                } else if mCount > 0 {
+                    mCount = mCount - 1
+                }
+                if mCount > 2 {
+                    let akubi:[String:Any] = ["time":dateStr,"あくび":1]
+                    databaseRef.childByAutoId().child(deviceId).setValue(akubi)
+                    mCount = 0
+                    
+                }
+                
+            }
         }
-        sTimer = Date()
+
+        layer.enqueue(sampleBuffer)
     }
     
     func captureOutput(_ captureOutput: AVCaptureOutput!, didDrop sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
