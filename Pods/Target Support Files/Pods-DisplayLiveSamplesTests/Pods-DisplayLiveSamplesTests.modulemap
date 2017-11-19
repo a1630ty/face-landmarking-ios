@@ -1,0 +1,6 @@
+framework module Pods_DisplayLiveSamplesTests {
+  umbrella header "Pods-DisplayLiveSamplesTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

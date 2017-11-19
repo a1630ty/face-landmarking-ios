@@ -11,6 +11,10 @@
 
 #include <dlib/image_processing.h>
 #include <dlib/image_io.h>
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <stdio.h>
 
 @interface DlibWrapper ()
 
@@ -42,7 +46,7 @@
     self.prepared = YES;
 }
 
-- (void)doWorkOnSampleBuffer:(CMSampleBufferRef)sampleBuffer inRects:(NSArray<NSValue *> *)rects {
+- (void)doWorkOnSampleBuffer:(CMSampleBufferRef)sampleBuffer inRects:(NSArray<NSValue *> *)rects long1:(long *)pnt1 long2:(long *) pnt2 long3:(long *)pnt3 long4:(long *)pnt4 long5:(long *)pnt5  long6:(long *)pnt6 long7:(long *)pnt7 long8:(long *)pnt8 {
     
     if (!self.prepared) {
         [self prepare];
@@ -57,6 +61,11 @@
     size_t width = CVPixelBufferGetWidth(imageBuffer);
     size_t height = CVPixelBufferGetHeight(imageBuffer);
     char *baseBuffer = (char *)CVPixelBufferGetBaseAddress(imageBuffer);
+    
+    long px1;
+    long px2;
+    long px3;
+    long px4;
     
     // set_size expects rows, cols format
     img.set_size(height, width);
@@ -97,9 +106,54 @@
         
         // and draw them into the image (samplebuffer)
         for (unsigned long k = 0; k < shape.num_parts(); k++) {
-            dlib::point p = shape.part(k);
-            draw_solid_circle(img, p, 3, dlib::rgb_pixel(0, 255, 255));
+        //for (unsigned long k = 0; k < 10; k++) {
+            if (k == 62) {
+                dlib::point p = shape.part(k);
+                draw_solid_circle(img, p, 3, dlib::rgb_pixel(0, 255, 0));
+                px1 = p.x();
+                //px2 = p.y();
+                *pnt1 = px1;
+                //*pnt1 = px1;
+            }else if (k == 66) {
+                dlib::point p = shape.part(k);
+                draw_solid_circle(img, p, 3, dlib::rgb_pixel(0, 0, 255));
+                //px3 = p.x();
+                px2 = p.y();
+                *pnt2 = px2;
+                //*pnt4 = px4;
+            
+                //dlib::point p = shape.part(k);
+                //draw_solid_circle(img, p, 3, dlib::rgb_pixel(0, 255, 255));
+            }
+            
         }
+        
+        for (unsigned long k = 0; k < shape.num_parts(); k++) {
+        //for (unsigned long k = 0; k < 10; k++) {
+            if (k > 45 && k < 48) {
+                dlib::point p = shape.part(k);
+                draw_solid_circle(img, p, 3, dlib::rgb_pixel(255, 0, 0));
+            }else if (k > 42 && k < 45) {
+                dlib::point p = shape.part(k);
+                draw_solid_circle(img, p, 3, dlib::rgb_pixel(0, 255, 0));
+            }else if (k > 36 && k < 39) {
+                dlib::point p = shape.part(k);
+                draw_solid_circle(img, p, 3, dlib::rgb_pixel(0, 0, 255));
+            }else if (k > 39 && k < 42) {
+                dlib::point p = shape.part(k);
+                draw_solid_circle(img, p, 3, dlib::rgb_pixel(255, 255, 255));
+            }else if (k > 26 && k < 28) {
+                dlib::point p = shape.part(k);
+                draw_solid_circle(img, p, 3, dlib::rgb_pixel(255, 0, 255));
+            }else if (k > 7 && k < 9) {
+                dlib::point p = shape.part(k);
+                draw_solid_circle(img, p, 3, dlib::rgb_pixel(255, 0, 255));
+            }
+            
+        }
+        //unsigned long s = shape.num_parts();
+        //printf("%ld\n", s);
+
     }
     
     // lets put everything back where it belongs

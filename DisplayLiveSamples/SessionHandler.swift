@@ -7,6 +7,8 @@
 //
 
 import AVFoundation
+import FirebaseCore
+import FirebaseDatabase
 
 class SessionHandler : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureMetadataOutputObjectsDelegate {
     var session = AVCaptureSession()
@@ -14,12 +16,20 @@ class SessionHandler : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, A
     let sampleQueue = DispatchQueue(label: "com.zweigraf.DisplayLiveSamples.sampleQueue", attributes: [])
     let faceQueue = DispatchQueue(label: "com.zweigraf.DisplayLiveSamples.faceQueue", attributes: [])
     let wrapper = DlibWrapper()
-    
+    var pnt1:CLong = 0
+    var pnt2:CLong = 0
+    var pnt3:CLong = 0
+    var pnt4:CLong = 0
+    var databaseRef:DatabaseReference!
     var currentMetadata: [AnyObject]
+    let deviceId = UIDevice.current.identifierForVendor!.uuidString
+    let formatter = DateFormatter()
+    let sTimer = Date()
     
     override init() {
         currentMetadata = []
         super.init()
+        databaseRef = Database.database().reference()
     }
     
     func openSession() {
@@ -73,14 +83,32 @@ class SessionHandler : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, A
                     return NSValue(cgRect: convertedObject!.bounds)
             }
             
-            wrapper?.doWork(on: sampleBuffer, inRects: boundsArray)
+            wrapper?.doWork(on: sampleBuffer, inRects: boundsArray,long1: &pnt1,long2: &pnt2,long3: &pnt3,long4: &pnt4)
         }
-
+        //print("上x" + String(pnt1) + "上y" + String(pnt2) + "下x" + String(pnt3) + "下y" + String(pnt4))
+        print("上：" + String(pnt2))
+        print("下：" + String(pnt4))
+        print("あき具合：" + String(pnt4 - pnt2))
+        moveFace()
         layer.enqueue(sampleBuffer)
     }
     
+    func moveFace(){
+        let date = Date()
+        if sTimer.timeIntervalSinceNow < -1  {
+            let dateStr = formatter.string(from: date)
+            //let heightPer = (self.view.bounds.height/image.size.height)
+            formatter.dateFormat = "MM-dd-HH-mm-ss"
+            let moveFace:[String:Any] = ["time":dateStr,"origin_x": pnt2,"origin_y": pnt4];
+            databaseRef.childByAutoId().child(deviceId).setValue(moveFace)
+            
+        }
+        sTimer = Date()
+    }
+    
     func captureOutput(_ captureOutput: AVCaptureOutput!, didDrop sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
-        print("DidDropSampleBuffer")
+        //print("DidDropSampleBuffer")
+        
     }
     
     // MARK: AVCaptureMetadataOutputObjectsDelegate

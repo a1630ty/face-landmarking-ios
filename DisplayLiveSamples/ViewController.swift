@@ -11,7 +11,6 @@ import AVFoundation
 
 class ViewController: UIViewController {
     let sessionHandler = SessionHandler()
-    
     @IBOutlet weak var preview: UIView!
     
     override func viewDidLoad() {
@@ -28,11 +27,9 @@ class ViewController: UIViewController {
         super.viewDidAppear(animated)
         
         sessionHandler.openSession()
-        
 
         let layer = sessionHandler.layer
         layer.frame = preview.bounds
-
         preview.layer.addSublayer(layer)
         
         view.layoutIfNeeded()
